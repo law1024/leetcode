@@ -4,56 +4,6 @@
  */
 
 // 返回最长子回文
-
-// version1 对每一个间隙进行遍历，并保存当前遍历到的最大子回文
-var longestPalindrome = function(s) {
-    if (!s) {
-        return 0;
-    }
-
-    if (s.length === 1) {
-        return s;
-    }
-    var i = 0,
-        l = s.length;
-
-    var str = '';
-
-    for (; i < l; i++) {
-        //先考虑以s[i]为中心
-        var m = i - 1,
-            n = i + 1;
-
-        for (; n < l, m >= 0; n ++, m --) {
-            if (s[n] !== s[m]) {
-                break;
-            }
-            if (str.length < n - m + 1) {
-                str = s.slice(m, n + 1);
-            }
-        }
-    }
-    // 考虑以间隙为分隔符，先分开写吧，之后再考虑合并
-
-    for (i = 0; i < l; i ++) {
-        var m = i,
-            n = i + 1;
-
-        for (; n < l, m >= 0; n ++, m --) {
-            if (s[n] !== s[m]) {
-                break;
-            }
-
-            if (str.length < n - m + 1) {
-                str = s.slice(m, n + 1);
-            }
-        }
-    }
-    return str;
-};
-
-// version 2 将两个循环合并成了一个
-
 var longestPalindrome = function(s) {
     //首先对特殊情况进行判断
     if (!s) {
@@ -88,5 +38,42 @@ var longestPalindrome = function(s) {
     return str;
 }
 
-console.log(longestPalindrome('ccc'));
+// 将最简单3重循环优化，将每一个子串是否是回文保存在一个2维数组中
+var longestPalindrome = function(s) {
+    if (!s) {
+        return 0;
+    }
+    if (s.length === 1) {
+        return 1;
+    }
+    var plain = [];
+    var i = 0,
+        l = s.length,
+        j;
+
+    for (; i < l; i ++) {
+        //必要的时候还是需要使用下new Array的
+        plain.push(new Array(l));
+    }
+    var res = '';
+    var max = 0;
+
+    for (i = l - 1; i >= 0; i --) {
+        for (j = i; j < l; j ++) {
+            if (s[i] === s[j] && ((j - i <= 2) || (plain[i + 1][j -1] === true))) {
+
+                //这个子串是回文
+                plain[i][j] = true;
+                if (max < j - i + 1) {
+                    max = j - i + 1;
+                    res = s.slice(i, j + 1);
+                }
+            }
+        }
+    }
+
+    return res;
+
+}
+console.log(longestPalindrome('accaccf'));
 // 第二种解法采用动态规划，http://www.tuicool.com/articles/eQNfqey
