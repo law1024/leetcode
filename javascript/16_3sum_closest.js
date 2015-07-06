@@ -43,6 +43,3 @@ var threeSumClosest = function(nums, target) {
     }
     return target - min;
 };
-
-var res = threeSumClosest([-1, 2, 1, -4], 1);
-console.log(res);
