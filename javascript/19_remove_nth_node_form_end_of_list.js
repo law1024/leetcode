@@ -16,7 +16,7 @@
  *
  * Accepted
  */
- 
+
 var removeNthFromEnd = function(head, n) {
     //首先把链表保存下来
     var res   = head;
